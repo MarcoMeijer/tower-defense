@@ -22,6 +22,17 @@ export function QueenAnt() {
   };
 }
 
+export function Bee() {
+  return {
+    tile: 18,
+    speed: 1,
+    health: 1,
+    x: path[0].x * 16,
+    y: path[0].y * 16,
+    pathPart: 0,
+  };
+}
+
 export const enemies = [];
 
 export function updateEnemy(enemy) {
