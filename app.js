@@ -1,6 +1,7 @@
 import { enemies, createAnt, updateEnemy } from "./enemies.js";
 import { createSunflower, towers, updateTower } from "./towers.js";
 import { tiles } from "./map.js";
+import { progressWave } from "./waves.js";
 
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
@@ -47,8 +48,6 @@ function drawBackground() {
   }
 }
 
-enemies.push(createAnt());
-
 function drawEntity(entity) {
   const { tile, x, y } = entity;
   drawTile(tile, x, y);
@@ -56,6 +55,9 @@ function drawEntity(entity) {
 
 function draw() {
   drawBackground();
+
+  progressWave(1 / 30);
+
   for (const enemy of enemies) {
     updateEnemy(enemy);
   }

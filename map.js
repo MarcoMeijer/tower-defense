@@ -95,4 +95,3 @@ function findPath() {
 
 export const path = findPath();
 
-console.log(path);
