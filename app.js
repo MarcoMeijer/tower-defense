@@ -53,8 +53,16 @@ function drawEntity(entity) {
   drawTile(tile, x, y);
 }
 
+export function drawRadius(tower) {
+  let { x, y, radius } = tower;
+  x += 8;
+  y += 8;
+  ctx.beginPath();
+  ctx.arc(x, y, radius, 0, 2 * Math.PI);
+  ctx.stroke();
+}
+
 function draw() {
-  drawBackground();
 
   progressWave(1 / 30);
 
@@ -72,12 +80,18 @@ function draw() {
     }
   }
 
+  // rendering
+  drawBackground();
   for (const enemy of enemies) {
     drawEntity(enemy);
   }
   for (const tower of towers) {
     drawEntity(tower);
   }
+  for (const tower of towers) {
+    drawRadius(tower);
+  }
+
   window.requestAnimationFrame(draw);
 }
 

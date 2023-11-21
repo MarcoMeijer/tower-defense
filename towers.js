@@ -17,10 +17,9 @@ export function updateTower(tower) {
 export function createSunflower(x, y) {
   return {
     tile: 24,
-    radius: 32,
+    radius: 40,
     recharge: 2,
     x,
     y,
   };
 }
-
