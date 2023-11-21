@@ -78,8 +78,8 @@ function wave6() {
     },
     {
       enemies: [Bee],
-      distance: 0.6,
-      amount: 5,
+      distance: 0.4,
+      amount: 10,
       wait: 15,
     }
   ]
@@ -92,8 +92,11 @@ export const currentWave = {
   timer: 0,
 };
 
+const waveText = document.getElementById("waveNumber");
+
 export function progressWave(delta) {
   currentWave.timer += delta;
+  waveText.innerText = `Wave: ${currentWave.number + 1}`;
 
   while (currentWave.number < waves.length) {
     const wave = waves[currentWave.number];
