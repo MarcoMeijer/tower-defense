@@ -22,7 +22,7 @@ async function loadImage(url) {
 function drawTile(i, x, y) {
   const tileX = i % 8;
   const tileY = Math.floor(i / 8);
-  ctx.drawImage(ss, tileX * 16, tileY * 16, 16, 16, x, y, 16, 16);
+  ctx.drawImage(ss, tileX * 16, tileY * 16, 16, 16, Math.floor(x), Math.floor(y), 16, 16);
 }
 
 function drawBackground() {
