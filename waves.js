@@ -1,13 +1,15 @@
-import { createAnt, enemies } from "./enemies.js";
+import { Ant, QueenAnt, enemies } from "./enemies.js";
 
 export const waves = [
   wave1(),
   wave2(),
+  wave3(),
+  wave4(),
 ];
 
 function wave1() {
   return [{
-    enemies: [createAnt],
+    enemies: [Ant],
     distance: 0.8,
     amount: 10,
     wait: 10,
@@ -17,17 +19,39 @@ function wave1() {
 function wave2() {
   return [
     {
-      enemies: [createAnt],
+      enemies: [Ant],
       distance: 0.5,
       amount: 10,
       wait: 1.5,
     },
     {
-      enemies: [createAnt],
+      enemies: [Ant],
       distance: 0.5,
       amount: 10,
       wait: 15,
     },
+  ]
+}
+
+function wave3() {
+  return [
+    {
+      enemies: [QueenAnt, Ant, Ant, Ant, Ant],
+      distance: 0.9,
+      amount: 15,
+      wait: 15,
+    }
+  ]
+}
+
+function wave4() {
+  return [
+    {
+      enemies: [QueenAnt],
+      distance: 1.4,
+      amount: 8,
+      wait: 15,
+    }
   ]
 }
 

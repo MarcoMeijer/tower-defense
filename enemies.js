@@ -1,13 +1,24 @@
 import { path } from "./map.js";
 
-export function createAnt() {
+export function Ant() {
   return {
     tile: 16,
+    speed: 0.5,
+    health: 1,
     x: path[0].x * 16,
     y: path[0].y * 16,
-    speed: 0.5,
     pathPart: 0,
-    health: 1,
+  };
+}
+
+export function QueenAnt() {
+  return {
+    tile: 17,
+    speed: 0.5,
+    health: 4,
+    x: path[0].x * 16,
+    y: path[0].y * 16,
+    pathPart: 0,
   };
 }
 
