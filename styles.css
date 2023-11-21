@@ -1,6 +1,12 @@
+@font-face {
+  font-family: TravelOctober;
+  src: url('./assets/Travel October.ttf') format('truetype');
+}
+
 * {
   margin: 0;
   padding: 0;
+  font-family: TravelOctober;
 }
 
 canvas {
