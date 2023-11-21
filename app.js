@@ -8,6 +8,8 @@ const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 const ss = await loadImage("spritesheet.png");
 
+let money = 150;
+
 canvas.width = 256;
 canvas.height = 144;
 
@@ -63,6 +65,8 @@ export function drawRadius(tower) {
   ctx.stroke();
 }
 
+const moneyElement = document.querySelector("#money");
+
 function draw() {
 
   progressWave(1 / 30);
@@ -80,6 +84,7 @@ function draw() {
   // kill enemies
   for (let i = enemies.length - 1; i >= 0; i--) {
     if (enemies[i].health <= 0) {
+      money += enemies[i].reward;
       enemies.splice(i, 1);
     }
   }
@@ -109,6 +114,8 @@ function draw() {
   }
   */
 
+  moneyElement.innerHTML = `$${money}`;
+
   window.requestAnimationFrame(draw);
 }
 
@@ -122,7 +129,8 @@ canvas.addEventListener('click', function(event) {
 
   const tileX = Math.floor(x / 48);
   const tileY = Math.floor(y / 48);
-  if (tiles[tileX][tileY] == ".") {
+  if (tiles[tileX][tileY] == "." && money >= 150) {
+    money -= 150;
     towers.push(createSunflower(tileX * 16, tileY * 16));
     tiles[tileX][tileY] = "X";
   }

@@ -8,6 +8,7 @@ export function Ant() {
     x: path[0].x * 16,
     y: path[0].y * 16,
     pathPart: 0,
+    reward: 5,
   };
 }
 
@@ -19,6 +20,7 @@ export function QueenAnt() {
     x: path[0].x * 16,
     y: path[0].y * 16,
     pathPart: 0,
+    reward: 25,
   };
 }
 
@@ -30,6 +32,7 @@ export function Bee() {
     x: path[0].x * 16,
     y: path[0].y * 16,
     pathPart: 0,
+    reward: 10,
   };
 }
 
