@@ -1,7 +1,8 @@
-import { enemies, createAnt, updateEnemy } from "./enemies.js";
+import { enemies, updateEnemy } from "./enemies.js";
 import { createSunflower, towers, updateTower } from "./towers.js";
 import { tiles } from "./map.js";
 import { progressWave } from "./waves.js";
+import { projectiles, updateProjectile } from "./projectiles.js";
 
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
@@ -70,13 +71,23 @@ function draw() {
     updateEnemy(enemy);
   }
   for (const tower of towers) {
-    updateTower(tower);
+    updateTower(tower, 1 / 30);
+  }
+  for (const projectile of projectiles) {
+    updateProjectile(projectile, 1 / 30);
   }
 
   // kill enemies
   for (let i = enemies.length - 1; i >= 0; i--) {
     if (enemies[i].health <= 0) {
       enemies.splice(i, 1);
+    }
+  }
+
+  // remove projectiles
+  for (let i = projectiles.length - 1; i >= 0; i--) {
+    if (projectiles[i].timeRemaining <= 0) {
+      projectiles.splice(i, 1);
     }
   }
 
@@ -88,9 +99,15 @@ function draw() {
   for (const tower of towers) {
     drawEntity(tower);
   }
+  for (const projectile of projectiles) {
+    drawEntity(projectile);
+  }
+
+  /*
   for (const tower of towers) {
     drawRadius(tower);
   }
+  */
 
   window.requestAnimationFrame(draw);
 }

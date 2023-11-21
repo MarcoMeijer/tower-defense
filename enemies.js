@@ -7,7 +7,7 @@ export function createAnt() {
     y: path[0].y * 16,
     speed: 0.5,
     pathPart: 0,
-    health: 20,
+    health: 1,
   };
 }
 
