@@ -28,11 +28,22 @@ export function updateTower(tower, dt) {
   }
 }
 
-export function createSunflower(x, y) {
+export function Sunflower(x, y) {
   return {
     tile: 24,
     radius: 40,
     recharge: 1,
+    timer: 0,
+    x,
+    y,
+  };
+}
+
+export function HoneyBlaster(x, y) {
+  return {
+    tile: 25,
+    radius: 60,
+    recharge: 2,
     timer: 0,
     x,
     y,

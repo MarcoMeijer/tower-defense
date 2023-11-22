@@ -5,8 +5,8 @@ export function Ant() {
     tile: 16,
     speed: 0.5,
     health: 1,
-    x: path[0].x * 16,
-    y: path[0].y * 16,
+    x: path[0].x * 24,
+    y: path[0].y * 24,
     pathPart: 0,
     reward: 5,
   };
@@ -17,8 +17,8 @@ export function QueenAnt() {
     tile: 17,
     speed: 0.5,
     health: 4,
-    x: path[0].x * 16,
-    y: path[0].y * 16,
+    x: path[0].x * 24,
+    y: path[0].y * 24,
     pathPart: 0,
     reward: 25,
   };
@@ -29,8 +29,8 @@ export function Bee() {
     tile: 18,
     speed: 1,
     health: 1,
-    x: path[0].x * 16,
-    y: path[0].y * 16,
+    x: path[0].x * 24,
+    y: path[0].y * 24,
     pathPart: 0,
     reward: 10,
   };
@@ -41,8 +41,8 @@ export const enemies = [];
 export function updateEnemy(enemy) {
   const { pathPart, speed } = enemy;
   const { x, y } = path[pathPart];
-  const targetX = x * 16;
-  const targetY = y * 16;
+  const targetX = x * 24;
+  const targetY = y * 24;
   if (targetX > enemy.x) {
     enemy.x += speed;
   }
