@@ -65,15 +65,13 @@ function createTowerUi() {
     const tileX = tile % 8;
     const tileY = Math.floor(tile / 8);
     towersElement.innerHTML += `
-    <div>
-        <div class="tower">
-          <div class="towerImage" style="background-position-x: -${tileX * 24 * 4}px; background-position-y: -${tileY * 24 * 4}px;"></div>
-          <h2>${name}</h2>
-          <h3>$${cost}</h3>
-          <p>Attack speed: ${1 / recharge}</p>
-          <p>Range: ${radius}</p>
-          <p>Damage: ${damage}</p>
-        </div>
+    <div class="tower">
+      <div class="towerImage" style="background-position-x: -${tileX * 24 * 4}px; background-position-y: -${tileY * 24 * 4}px;"></div>
+      <h2>${name}</h2>
+      <h3>$${cost}</h3>
+      <p>Attack speed: ${1 / recharge}</p>
+      <p>Range: ${radius}</p>
+      <p>Damage: ${damage}</p>
     </div>
     `
   }
