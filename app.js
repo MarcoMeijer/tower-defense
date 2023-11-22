@@ -6,7 +6,7 @@ import { projectiles, updateProjectile } from "./projectiles.js";
 
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
-const ss = await loadImage("spritesheet.png");
+const ss = await loadImage("assets/spritesheet.png");
 
 let money = 150;
 

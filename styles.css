@@ -40,7 +40,7 @@ div {
 .towerImage {
   width: 96px;
   height: 96px;
-  background-image: url("spritesheet.png");
+  background-image: url("assets/spritesheet.png");
   background-size: 768px 768px;
   image-rendering: pixelated;
 }
