@@ -36,8 +36,6 @@ export function Bee() {
   };
 }
 
-export const enemies = [];
-
 export function updateEnemy(enemy) {
   const { pathPart, speed } = enemy;
 

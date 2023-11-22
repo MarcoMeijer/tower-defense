@@ -1,20 +1,16 @@
-import { enemies } from "./enemies.js";
-import { projectiles } from "./projectiles.js";
 import { distance } from "./util.js";
 import { state } from "./state.js"
-
-export const towers = [];
 
 export function updateTower(tower, dt) {
   const { radius, tile, recharge, x, y } = tower;
   tower.timer += dt;
 
   if (tower.timer > recharge) {
-    for (const enemy of enemies) {
+    for (const enemy of state.enemies) {
       if (distance(enemy, tower) < radius) {
         // shoot
         enemy.health -= 1;
-        projectiles.push({
+        state.projectiles.push({
           tile: tile + 8,
           x,
           y,

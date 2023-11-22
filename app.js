@@ -1,8 +1,8 @@
-import { enemies, updateEnemy } from "./enemies.js";
-import { towerTypes, towers, updateTower } from "./towers.js";
+import { updateEnemy } from "./enemies.js";
+import { towerTypes, updateTower } from "./towers.js";
 import { path, tiles } from "./map.js";
-import { currentWave, progressWave } from "./waves.js";
-import { projectiles, updateProjectile } from "./projectiles.js";
+import { progressWave } from "./waves.js";
+import { updateProjectile } from "./projectiles.js";
 import { state } from "./state.js";
 
 const canvas = document.querySelector("canvas");
@@ -72,52 +72,46 @@ function draw() {
 
   progressWave(1 / 30);
 
-  for (const enemy of enemies) {
+  for (const enemy of state.enemies) {
     updateEnemy(enemy);
   }
-  for (const tower of towers) {
+  for (const tower of state.towers) {
     updateTower(tower, 1 / 30);
   }
-  for (const projectile of projectiles) {
+  for (const projectile of state.projectiles) {
     updateProjectile(projectile, 1 / 30);
   }
 
   // kill enemies
-  for (let i = enemies.length - 1; i >= 0; i--) {
-    if (enemies[i].health <= 0) {
-      state.money += enemies[i].reward;
-      enemies.splice(i, 1);
-    } else if (enemies[i].pathPart == path.length) {
-      state.health -= enemies[i].health;
+  for (let i = state.enemies.length - 1; i >= 0; i--) {
+    if (state.enemies[i].health <= 0) {
+      state.money += state.enemies[i].reward;
+      state.enemies.splice(i, 1);
+    } else if (state.enemies[i].pathPart == path.length) {
+      state.health -= state.enemies[i].health;
       state.health = Math.max(state.health, 0);
-      enemies.splice(i, 1);
+      state.enemies.splice(i, 1);
     }
   }
 
   // remove projectiles
-  for (let i = projectiles.length - 1; i >= 0; i--) {
-    if (projectiles[i].timeRemaining <= 0) {
-      projectiles.splice(i, 1);
+  for (let i = state.projectiles.length - 1; i >= 0; i--) {
+    if (state.projectiles[i].timeRemaining <= 0) {
+      state.projectiles.splice(i, 1);
     }
   }
 
   // rendering
   drawBackground();
-  for (const enemy of enemies) {
+  for (const enemy of state.enemies) {
     drawEntity(enemy);
   }
-  for (const tower of towers) {
+  for (const tower of state.towers) {
     drawEntity(tower);
   }
-  for (const projectile of projectiles) {
+  for (const projectile of state.projectiles) {
     drawEntity(projectile);
   }
-
-  /*
-  for (const tower of towers) {
-    drawRadius(tower);
-  }
-  */
 
   livesElement.innerHTML = `Lives: ${state.health}`;
   moneyElement.innerHTML = `$${state.money}`;
@@ -141,14 +135,14 @@ canvas.addEventListener('click', function(event) {
   const tower = towerTypes[state.selectedTower](tileX * 24, tileY * 24);
   if (tiles[tileX][tileY] == "." && state.money >= tower.cost) {
     state.money -= tower.cost;
-    towers.push(tower);
+    state.towers.push(tower);
     tiles[tileX][tileY] = "X";
   }
 });
 
 function handleEvent(event) {
   if (event.type === "start") {
-    currentWave.started = true;
+    state.currentWave.started = true;
   }
 }
 

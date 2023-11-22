@@ -1,6 +1,4 @@
 
-export const projectiles = [];
-
 export function updateProjectile(projectile, dt) {
   const { x, y, targetX, targetY, timeRemaining } = projectile;
   const dx = dt * (targetX - x) / timeRemaining;

@@ -1,4 +1,5 @@
-import { Ant, Bee, QueenAnt, enemies } from "./enemies.js";
+import { Ant, Bee, QueenAnt } from "./enemies.js";
+import { state } from "./state.js";
 
 export const waves = [
   wave1(),
@@ -85,17 +86,10 @@ function wave6() {
   ]
 }
 
-export const currentWave = {
-  started: false,
-  number: 0,
-  group: 0,
-  enemy: 0,
-  timer: 0,
-};
-
 const waveText = document.getElementById("waveNumber");
 
 export function progressWave(delta) {
+  const { currentWave } = state;
   if (!currentWave.started) {
     return;
   }
@@ -133,7 +127,7 @@ export function progressWave(delta) {
 
     currentWave.timer -= group.distance;
     const enemy = group.enemies[currentWave.enemy % group.enemies.length];
-    enemies.push(enemy());
+    state.enemies.push(enemy());
     currentWave.enemy++;
   }
 }
