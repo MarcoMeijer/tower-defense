@@ -28,9 +28,10 @@ div {
 .ui {
   padding: 10px;
   flex: 1;
+  gap: 10px;
 }
 
-#towers {
+#towers, #enemies {
   display: grid;
   align-self: stretch;
   gap: 10px;
@@ -45,21 +46,28 @@ div {
   image-rendering: pixelated;
 }
 
-.tower {
+.tower, .enemy {
   align-items: center;
   background-color: hsl(255, 24%, 86%);
   padding: 20px;
   border-radius: 10px;
   border-bottom: 3px solid hsl(267, 20%, 30%);
   transition: ease-out 0.1s;
+  cursor: pointer;
 }
 
 .tower.selected {
   background-color: hsl(255, 40%, 75%);
 }
 
-.tower:hover {
-  transform: scale(1.04);
+.tower:hover, .enemy:hover {
+  transform: scale(1.02);
+  background-color: hsl(255, 28%, 82%);
+}
+
+.tower:active, .enemy:active {
+  transform: scale(0.98);
+  background-color: hsl(255, 40%, 75%);
 }
 
 .game {

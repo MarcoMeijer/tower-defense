@@ -1,4 +1,4 @@
-import { distance } from "./util.js";
+import { createElementFromHTML, distance } from "./util.js";
 
 export function updateTower(state, tower, dt) {
   const { radius, tile, recharge, x, y } = tower;
@@ -53,12 +53,6 @@ export function HoneyBlaster(x, y) {
 }
 
 export const towerTypes = [Sunflower, HoneyBlaster];
-
-function createElementFromHTML(htmlString) {
-  var div = document.createElement('div');
-  div.innerHTML = htmlString.trim();
-  return div.firstChild;
-}
 
 export function createTowerUi(state) {
   const towersElement = document.querySelector("#towers");

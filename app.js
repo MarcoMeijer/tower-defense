@@ -1,4 +1,4 @@
-import { updateEnemy } from "./enemies.js";
+import { createEnemyUi, enemyTypes, updateEnemy } from "./enemies.js";
 import { createTowerUi, towerTypes, updateTower } from "./towers.js";
 import { path, tiles } from "./map.js";
 import { progressWave } from "./waves.js";
@@ -154,13 +154,13 @@ myCanvas.addEventListener('click', function(event) {
 });
 
 function handleEvent(event) {
-  console.log(event);
   if (event.type === "start") {
     myState.currentWave.started = true;
     opponentState.currentWave.started = true;
     draw(myCtx, myState);
     draw(opponentCtx, opponentState);
     createTowerUi(myState);
+    createEnemyUi(myState, socket);
 
   }
   if (event.type === "update") {
@@ -170,14 +170,25 @@ function handleEvent(event) {
       draw(myCtx, myState);
       draw(opponentCtx, opponentState);
       createTowerUi(myState);
+      createEnemyUi(myState, socket);
     }
-    opponentState.towers = event.state.towers;
+    for (const key in event.state) {
+      opponentState[key] = event.state[key];
+    }
+  }
+  if (event.type === "send") {
+    const { name } = event;
+    for (const enemyFactory of enemyTypes) {
+      const enemy = enemyFactory();
+      if (enemy.name === name) {
+        myState.enemies.push(enemy);
+      }
+    }
   }
 }
 
 socket.onopen = function() {
   console.log("[open] Connection established");
-  console.log("Sending to server");
 };
 
 socket.onmessage = function(event) {
