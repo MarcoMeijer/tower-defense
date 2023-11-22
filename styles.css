@@ -7,6 +7,7 @@
   margin: 0;
   padding: 0;
   font-family: TravelOctober;
+  user-select: none;
 }
 
 canvas {
@@ -72,4 +73,27 @@ div {
 
 .game {
   flex-direction: column;
+}
+
+.games {
+  gap: 5px;
+  padding: 5px;
+  align-items: center;
+}
+
+.gameContainer {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.gameUi {
+  position: absolute;
+  padding: 10px;
+  color: #ffffff;
+  text-shadow: #000000 2px 2px 0px;
+}
+
+.gameUi.right {
+  right: 0;
 }

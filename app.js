@@ -74,10 +74,7 @@ export function drawRadius(ctx, tower) {
   ctx.stroke();
 }
 
-const moneyElement = document.querySelector("#money");
-const livesElement = document.querySelector("#lives");
-
-function draw(ctx, state) {
+function draw(canvas, ctx, state) {
 
   // wave logic
   progressWave(state, 1 / 30);
@@ -124,22 +121,29 @@ function draw(ctx, state) {
     drawEntity(ctx, projectile);
   }
 
-  if (state === myState) {
-    livesElement.innerHTML = `Lives: ${state.health}`;
-    moneyElement.innerHTML = `$${state.money}`;
+  const gameDiv = canvas.parentNode;
+  const moneyElement = gameDiv.querySelector(".money");
+  const livesElement = gameDiv.querySelector(".lives");
+  const waveText = gameDiv.querySelector(".waveNumber");
 
+  livesElement.innerText = `Lives: ${state.health}`;
+  moneyElement.innerText = `$${state.money}`;
+  waveText.innerText = `Wave: ${state.currentWave.number + 1}`;
+
+  if (state === myState) {
     socket.send(JSON.stringify({ type: "update", state }));
   }
 
-  window.requestAnimationFrame(() => draw(ctx, state));
+  window.requestAnimationFrame(() => draw(canvas, ctx, state));
 }
 
 myCanvas.addEventListener('click', function(event) {
   if (myState.towerSelected == -1)
     return;
 
-  const canvasLeft = myCanvas.offsetLeft + myCanvas.clientLeft;
-  const canvasTop = myCanvas.offsetTop + myCanvas.clientTop;
+  const origin = myCanvas.parentNode;
+  const canvasLeft = origin.offsetLeft + origin.clientLeft;
+  const canvasTop = origin.offsetTop + origin.clientTop;
   const x = event.pageX - canvasLeft;
   const y = event.pageY - canvasTop;
 
@@ -157,8 +161,8 @@ function handleEvent(event) {
   if (event.type === "start") {
     myState.currentWave.started = true;
     opponentState.currentWave.started = true;
-    draw(myCtx, myState);
-    draw(opponentCtx, opponentState);
+    draw(myCanvas, myCtx, myState);
+    draw(opponentCanvas, opponentCtx, opponentState);
     createTowerUi(myState);
     createEnemyUi(myState, socket);
 
@@ -167,8 +171,8 @@ function handleEvent(event) {
     if (myState.currentWave.started === false) {
       myState.currentWave.started = true;
       opponentState.currentWave.started = true;
-      draw(myCtx, myState);
-      draw(opponentCtx, opponentState);
+      draw(myCanvas, myCtx, myState);
+      draw(opponentCanvas, opponentCtx, opponentState);
       createTowerUi(myState);
       createEnemyUi(myState, socket);
     }
@@ -192,11 +196,8 @@ socket.onopen = function() {
 };
 
 socket.onmessage = function(event) {
-  try {
-    const message = JSON.parse(event.data);
-    handleEvent(message);
-  } catch (err) {
-  }
+  const message = JSON.parse(event.data);
+  handleEvent(message);
 };
 
 socket.onclose = function(event) {

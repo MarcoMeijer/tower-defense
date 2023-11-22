@@ -9,15 +9,34 @@
 <body>
   <div class="content">
     <div class="games">
-      <canvas id="myGame"></canvas>
-      <canvas id="opponentGame"></canvas>
+      <h2>You:</h2>
+      <div class="gameContainer">
+        <canvas id="myGame"></canvas>
+        <div class="gameUi left">
+          <h1 class="waveNumber">Wave: 1</h1>
+          <h1 class="lives">Lives: 100</h1>
+        </div>
+        <div class="gameUi right">
+          <h1 class="money">$0</h1>
+        </div>
+      </div>
+      <h2>Opponent:</h2>
+      <div class="gameContainer">
+        <canvas id="opponentGame"></canvas>
+        <div class="gameUi left">
+          <h1 class="waveNumber">Wave: 1</h1>
+          <h1 class="lives">Lives: 100</h1>
+        </div>
+        <div class="gameUi right">
+          <h1 class="money">$0</h1>
+        </div>
+      </div>
     </div>
     <div class="ui">
-      <h1 id="waveNumber">Wave: 1</h1>
-      <h1 id="lives">Lives: 100</h1>
-      <h1 id="money">$0</h1>
+      <h1>Towers</h1>
       <div id="towers">
       </div>
+      <h1>Enemies</h1>
       <div id="enemies">
       </div>
     </div>

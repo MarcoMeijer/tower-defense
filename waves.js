@@ -85,7 +85,6 @@ function wave6() {
   ]
 }
 
-const waveText = document.getElementById("waveNumber");
 
 export function progressWave(state, delta) {
   const { currentWave } = state;
@@ -94,7 +93,6 @@ export function progressWave(state, delta) {
   }
 
   currentWave.timer += delta;
-  waveText.innerText = `Wave: ${currentWave.number + 1}`;
 
   while (currentWave.number < waves.length) {
     const wave = waves[currentWave.number];
