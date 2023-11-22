@@ -83,7 +83,7 @@ export function createTowerUi(state) {
         selected.classList.remove("selected");
       }
       tower.classList.add("selected");
-      state.selectedTower = i;
+      state.towerSelected = i;
     });
     towersElement.appendChild(tower);
   }

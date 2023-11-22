@@ -62,3 +62,6 @@ div {
   transform: scale(1.04);
 }
 
+.game {
+  flex-direction: column;
+}

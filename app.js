@@ -5,15 +5,21 @@ import { progressWave } from "./waves.js";
 import { updateProjectile } from "./projectiles.js";
 import { newGame } from "./state.js";
 
+const socket = new WebSocket("ws://localhost:9090/ws");
+
+const myCanvas = document.querySelector("#myGame");
+const opponentCanvas = document.querySelector("#opponentGame");
+
+const myCtx = myCanvas.getContext("2d");
+const opponentCtx = opponentCanvas.getContext("2d");
+
+myCanvas.width = opponentCanvas.width = 384;
+myCanvas.height = opponentCanvas.height = 216;
+
 const myState = newGame();
 const opponentState = newGame();
 
-const canvas = document.querySelector("canvas");
-const ctx = canvas.getContext("2d");
 const ss = await loadImage("assets/spritesheet.png");
-
-canvas.width = 384;
-canvas.height = 216;
 
 async function loadImage(url) {
   return new Promise((resolve) => {
@@ -25,41 +31,41 @@ async function loadImage(url) {
   });
 }
 
-function drawTile(i, x, y) {
+function drawTile(ctx, i, x, y) {
   const tileX = i % 8;
   const tileY = Math.floor(i / 8);
   ctx.drawImage(ss, tileX * 24, tileY * 24, 24, 24, Math.floor(x), Math.floor(y), 24, 24);
 }
 
-function drawBackground() {
+function drawBackground(ctx) {
   for (let i = 0; i < 16; i++) {
     for (let j = 0; j < 9; j++) {
       if (tiles[i][j] == "-") {
-        drawTile(8, i * 24, j * 24);
+        drawTile(ctx, 8, i * 24, j * 24);
       } else if (tiles[i][j] == "|") {
-        drawTile(9, i * 24, j * 24);
+        drawTile(ctx, 9, i * 24, j * 24);
       } else if (tiles[i][j] == "1") {
-        drawTile(10, i * 24, j * 24);
+        drawTile(ctx, 10, i * 24, j * 24);
       } else if (tiles[i][j] == "2") {
-        drawTile(11, i * 24, j * 24);
+        drawTile(ctx, 11, i * 24, j * 24);
       } else if (tiles[i][j] == "3") {
-        drawTile(12, i * 24, j * 24);
+        drawTile(ctx, 12, i * 24, j * 24);
       } else if (tiles[i][j] == "4") {
-        drawTile(13, i * 24, j * 24);
+        drawTile(ctx, 13, i * 24, j * 24);
       } else {
         let tile = (i * 7 + j * 13) % 4;
-        drawTile(tile, i * 24, j * 24);
+        drawTile(ctx, tile, i * 24, j * 24);
       }
     }
   }
 }
 
-function drawEntity(entity) {
+function drawEntity(ctx, entity) {
   const { tile, x, y } = entity;
-  drawTile(tile, x, y);
+  drawTile(ctx, tile, x, y);
 }
 
-export function drawRadius(tower) {
+export function drawRadius(ctx, tower) {
   let { x, y, radius } = tower;
   x += 12;
   y += 12;
@@ -71,10 +77,12 @@ export function drawRadius(tower) {
 const moneyElement = document.querySelector("#money");
 const livesElement = document.querySelector("#lives");
 
-function draw(state) {
+function draw(ctx, state) {
 
+  // wave logic
   progressWave(state, 1 / 30);
 
+  // update entities
   for (const enemy of state.enemies) {
     updateEnemy(enemy);
   }
@@ -105,38 +113,39 @@ function draw(state) {
   }
 
   // rendering
-  drawBackground();
+  drawBackground(ctx);
   for (const enemy of state.enemies) {
-    drawEntity(enemy);
+    drawEntity(ctx, enemy);
   }
   for (const tower of state.towers) {
-    drawEntity(tower);
+    drawEntity(ctx, tower);
   }
   for (const projectile of state.projectiles) {
-    drawEntity(projectile);
+    drawEntity(ctx, projectile);
   }
 
-  livesElement.innerHTML = `Lives: ${state.health}`;
-  moneyElement.innerHTML = `$${state.money}`;
+  if (state === myState) {
+    livesElement.innerHTML = `Lives: ${state.health}`;
+    moneyElement.innerHTML = `$${state.money}`;
 
-  window.requestAnimationFrame(() => draw(state));
+    socket.send(JSON.stringify({ type: "update", state }));
+  }
+
+  window.requestAnimationFrame(() => draw(ctx, state));
 }
 
-draw(myState);
-createTowerUi(myState);
-
-canvas.addEventListener('click', function(event) {
-  if (myState.selectedTower == -1)
+myCanvas.addEventListener('click', function(event) {
+  if (myState.towerSelected == -1)
     return;
 
-  const canvasLeft = canvas.offsetLeft + canvas.clientLeft;
-  const canvasTop = canvas.offsetTop + canvas.clientTop;
+  const canvasLeft = myCanvas.offsetLeft + myCanvas.clientLeft;
+  const canvasTop = myCanvas.offsetTop + myCanvas.clientTop;
   const x = event.pageX - canvasLeft;
   const y = event.pageY - canvasTop;
 
   const tileX = Math.floor(x / 48);
   const tileY = Math.floor(y / 48);
-  const tower = towerTypes[myState.selectedTower](tileX * 24, tileY * 24);
+  const tower = towerTypes[myState.towerSelected](tileX * 24, tileY * 24);
   if (tiles[tileX][tileY] == "." && myState.money >= tower.cost) {
     myState.money -= tower.cost;
     myState.towers.push(tower);
@@ -145,17 +154,30 @@ canvas.addEventListener('click', function(event) {
 });
 
 function handleEvent(event) {
+  console.log(event);
   if (event.type === "start") {
     myState.currentWave.started = true;
+    opponentState.currentWave.started = true;
+    draw(myCtx, myState);
+    draw(opponentCtx, opponentState);
+    createTowerUi(myState);
+
+  }
+  if (event.type === "update") {
+    if (myState.currentWave.started === false) {
+      myState.currentWave.started = true;
+      opponentState.currentWave.started = true;
+      draw(myCtx, myState);
+      draw(opponentCtx, opponentState);
+      createTowerUi(myState);
+    }
+    opponentState.towers = event.state.towers;
   }
 }
-
-const socket = new WebSocket("ws://localhost:9090/ws");
 
 socket.onopen = function() {
   console.log("[open] Connection established");
   console.log("Sending to server");
-  socket.send("start_connection");
 };
 
 socket.onmessage = function(event) {
