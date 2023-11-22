@@ -1,7 +1,7 @@
 import { enemies, updateEnemy } from "./enemies.js";
 import { towerTypes, towers, updateTower } from "./towers.js";
 import { path, tiles } from "./map.js";
-import { progressWave } from "./waves.js";
+import { currentWave, progressWave } from "./waves.js";
 import { projectiles, updateProjectile } from "./projectiles.js";
 import { state } from "./state.js";
 
@@ -145,3 +145,38 @@ canvas.addEventListener('click', function(event) {
     tiles[tileX][tileY] = "X";
   }
 });
+
+function handleEvent(event) {
+  if (event.type === "start") {
+    currentWave.started = true;
+  }
+}
+
+const socket = new WebSocket("ws://localhost:9090/ws");
+
+socket.onopen = function() {
+  console.log("[open] Connection established");
+  console.log("Sending to server");
+  socket.send("start_connection");
+};
+
+socket.onmessage = function(event) {
+  try {
+    const message = JSON.parse(event.data);
+    handleEvent(message);
+  } catch (err) {
+  }
+};
+
+socket.onclose = function(event) {
+  if (event.wasClean) {
+    console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+  } else {
+    console.log('[close] Connection died');
+  }
+};
+
+socket.onerror = function(error) {
+  console.log(error)
+};
+
