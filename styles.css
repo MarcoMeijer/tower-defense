@@ -54,6 +54,10 @@ div {
   transition: ease-out 0.1s;
 }
 
+.tower.selected {
+  background-color: hsl(255, 40%, 75%);
+}
+
 .tower:hover {
   transform: scale(1.04);
 }

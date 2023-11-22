@@ -56,16 +56,23 @@ export function HoneyBlaster(x, y) {
   };
 }
 
-export const TowerTypes = [Sunflower, HoneyBlaster];
+export const towerTypes = [Sunflower, HoneyBlaster];
+export let selectedTower = -1;
+
+function createElementFromHTML(htmlString) {
+  var div = document.createElement('div');
+  div.innerHTML = htmlString.trim();
+  return div.firstChild;
+}
 
 function createTowerUi() {
   const towersElement = document.querySelector("#towers");
-  for (const towerFactory of TowerTypes) {
-    const { name, cost, recharge, radius, damage, tile } = towerFactory();
+  for (let i = 0; i < towerTypes.length; i++) {
+    const { name, cost, recharge, radius, damage, tile } = towerTypes[i]();
     const tileX = tile % 8;
     const tileY = Math.floor(tile / 8);
-    towersElement.innerHTML += `
-    <div class="tower">
+    const tower = createElementFromHTML(`
+    <div class="tower" id="tower${i}">
       <div class="towerImage" style="background-position-x: -${tileX * 24 * 4}px; background-position-y: -${tileY * 24 * 4}px;"></div>
       <h2>${name}</h2>
       <h3>$${cost}</h3>
@@ -73,7 +80,17 @@ function createTowerUi() {
       <p>Range: ${radius}</p>
       <p>Damage: ${damage}</p>
     </div>
-    `
+    `);
+
+    tower.addEventListener("click", () => {
+      const prevSelected = document.querySelectorAll(".tower.selected");
+      for (const selected of prevSelected) {
+        selected.classList.remove("selected");
+      }
+      tower.classList.add("selected");
+      selectedTower = i;
+    });
+    towersElement.appendChild(tower);
   }
 }
 

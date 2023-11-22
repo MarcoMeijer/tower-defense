@@ -1,5 +1,5 @@
 import { enemies, updateEnemy } from "./enemies.js";
-import { Sunflower, towers, updateTower } from "./towers.js";
+import { Sunflower, selectedTower, towerTypes, towers, updateTower } from "./towers.js";
 import { tiles } from "./map.js";
 import { progressWave } from "./waves.js";
 import { projectiles, updateProjectile } from "./projectiles.js";
@@ -123,6 +123,9 @@ function draw() {
 draw();
 
 canvas.addEventListener('click', function(event) {
+  if (selectedTower == -1)
+    return;
+
   const canvasLeft = canvas.offsetLeft + canvas.clientLeft;
   const canvasTop = canvas.offsetTop + canvas.clientTop;
   const x = event.pageX - canvasLeft;
@@ -130,9 +133,10 @@ canvas.addEventListener('click', function(event) {
 
   const tileX = Math.floor(x / 48);
   const tileY = Math.floor(y / 48);
-  if (tiles[tileX][tileY] == "." && money >= 150) {
-    money -= 150;
-    towers.push(Sunflower(tileX * 24, tileY * 24));
+  const tower = towerTypes[selectedTower](tileX * 24, tileY * 24);
+  if (tiles[tileX][tileY] == "." && money >= tower.cost) {
+    money -= tower.cost;
+    towers.push(tower);
     tiles[tileX][tileY] = "X";
   }
 });
