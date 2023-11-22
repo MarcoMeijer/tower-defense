@@ -1,7 +1,5 @@
 
-export const state = newGame();
-
-function newGame() {
+export function newGame() {
   return {
     money: 150,
     health: 100,

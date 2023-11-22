@@ -1,5 +1,4 @@
 import { Ant, Bee, QueenAnt } from "./enemies.js";
-import { state } from "./state.js";
 
 export const waves = [
   wave1(),
@@ -88,7 +87,7 @@ function wave6() {
 
 const waveText = document.getElementById("waveNumber");
 
-export function progressWave(delta) {
+export function progressWave(state, delta) {
   const { currentWave } = state;
   if (!currentWave.started) {
     return;

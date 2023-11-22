@@ -1,7 +1,6 @@
 import { distance } from "./util.js";
-import { state } from "./state.js"
 
-export function updateTower(tower, dt) {
+export function updateTower(state, tower, dt) {
   const { radius, tile, recharge, x, y } = tower;
   tower.timer += dt;
 
@@ -61,7 +60,7 @@ function createElementFromHTML(htmlString) {
   return div.firstChild;
 }
 
-function createTowerUi() {
+export function createTowerUi(state) {
   const towersElement = document.querySelector("#towers");
   for (let i = 0; i < towerTypes.length; i++) {
     const { name, cost, recharge, radius, damage, tile } = towerTypes[i]();
@@ -89,5 +88,3 @@ function createTowerUi() {
     towersElement.appendChild(tower);
   }
 }
-
-createTowerUi();

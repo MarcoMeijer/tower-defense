@@ -1,9 +1,12 @@
 import { updateEnemy } from "./enemies.js";
-import { towerTypes, updateTower } from "./towers.js";
+import { createTowerUi, towerTypes, updateTower } from "./towers.js";
 import { path, tiles } from "./map.js";
 import { progressWave } from "./waves.js";
 import { updateProjectile } from "./projectiles.js";
-import { state } from "./state.js";
+import { newGame } from "./state.js";
+
+const myState = newGame();
+const opponentState = newGame();
 
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
@@ -68,15 +71,15 @@ export function drawRadius(tower) {
 const moneyElement = document.querySelector("#money");
 const livesElement = document.querySelector("#lives");
 
-function draw() {
+function draw(state) {
 
-  progressWave(1 / 30);
+  progressWave(state, 1 / 30);
 
   for (const enemy of state.enemies) {
     updateEnemy(enemy);
   }
   for (const tower of state.towers) {
-    updateTower(tower, 1 / 30);
+    updateTower(state, tower, 1 / 30);
   }
   for (const projectile of state.projectiles) {
     updateProjectile(projectile, 1 / 30);
@@ -116,13 +119,14 @@ function draw() {
   livesElement.innerHTML = `Lives: ${state.health}`;
   moneyElement.innerHTML = `$${state.money}`;
 
-  window.requestAnimationFrame(draw);
+  window.requestAnimationFrame(() => draw(state));
 }
 
-draw();
+draw(myState);
+createTowerUi(myState);
 
 canvas.addEventListener('click', function(event) {
-  if (state.selectedTower == -1)
+  if (myState.selectedTower == -1)
     return;
 
   const canvasLeft = canvas.offsetLeft + canvas.clientLeft;
@@ -132,17 +136,17 @@ canvas.addEventListener('click', function(event) {
 
   const tileX = Math.floor(x / 48);
   const tileY = Math.floor(y / 48);
-  const tower = towerTypes[state.selectedTower](tileX * 24, tileY * 24);
-  if (tiles[tileX][tileY] == "." && state.money >= tower.cost) {
-    state.money -= tower.cost;
-    state.towers.push(tower);
+  const tower = towerTypes[myState.selectedTower](tileX * 24, tileY * 24);
+  if (tiles[tileX][tileY] == "." && myState.money >= tower.cost) {
+    myState.money -= tower.cost;
+    myState.towers.push(tower);
     tiles[tileX][tileY] = "X";
   }
 });
 
 function handleEvent(event) {
   if (event.type === "start") {
-    state.currentWave.started = true;
+    myState.currentWave.started = true;
   }
 }
 
