@@ -40,6 +40,11 @@ export const enemies = [];
 
 export function updateEnemy(enemy) {
   const { pathPart, speed } = enemy;
+
+  if (enemy.pathPart == path.length) {
+    return;
+  }
+
   const { x, y } = path[pathPart];
   const targetX = x * 24;
   const targetY = y * 24;

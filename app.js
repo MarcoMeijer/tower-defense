@@ -1,14 +1,13 @@
 import { enemies, updateEnemy } from "./enemies.js";
-import { Sunflower, selectedTower, towerTypes, towers, updateTower } from "./towers.js";
-import { tiles } from "./map.js";
+import { towerTypes, towers, updateTower } from "./towers.js";
+import { path, tiles } from "./map.js";
 import { progressWave } from "./waves.js";
 import { projectiles, updateProjectile } from "./projectiles.js";
+import { state } from "./state.js";
 
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 const ss = await loadImage("assets/spritesheet.png");
-
-let money = 150;
 
 canvas.width = 384;
 canvas.height = 216;
@@ -67,6 +66,7 @@ export function drawRadius(tower) {
 }
 
 const moneyElement = document.querySelector("#money");
+const livesElement = document.querySelector("#lives");
 
 function draw() {
 
@@ -85,7 +85,11 @@ function draw() {
   // kill enemies
   for (let i = enemies.length - 1; i >= 0; i--) {
     if (enemies[i].health <= 0) {
-      money += enemies[i].reward;
+      state.money += enemies[i].reward;
+      enemies.splice(i, 1);
+    } else if (enemies[i].pathPart == path.length) {
+      state.health -= enemies[i].health;
+      state.health = Math.max(state.health, 0);
       enemies.splice(i, 1);
     }
   }
@@ -115,7 +119,8 @@ function draw() {
   }
   */
 
-  moneyElement.innerHTML = `$${money}`;
+  livesElement.innerHTML = `Lives: ${state.health}`;
+  moneyElement.innerHTML = `$${state.money}`;
 
   window.requestAnimationFrame(draw);
 }
@@ -123,7 +128,7 @@ function draw() {
 draw();
 
 canvas.addEventListener('click', function(event) {
-  if (selectedTower == -1)
+  if (state.selectedTower == -1)
     return;
 
   const canvasLeft = canvas.offsetLeft + canvas.clientLeft;
@@ -133,9 +138,9 @@ canvas.addEventListener('click', function(event) {
 
   const tileX = Math.floor(x / 48);
   const tileY = Math.floor(y / 48);
-  const tower = towerTypes[selectedTower](tileX * 24, tileY * 24);
-  if (tiles[tileX][tileY] == "." && money >= tower.cost) {
-    money -= tower.cost;
+  const tower = towerTypes[state.selectedTower](tileX * 24, tileY * 24);
+  if (tiles[tileX][tileY] == "." && state.money >= tower.cost) {
+    state.money -= tower.cost;
     towers.push(tower);
     tiles[tileX][tileY] = "X";
   }

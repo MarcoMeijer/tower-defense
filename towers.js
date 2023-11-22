@@ -1,6 +1,7 @@
 import { enemies } from "./enemies.js";
 import { projectiles } from "./projectiles.js";
 import { distance } from "./util.js";
+import { state } from "./state.js"
 
 export const towers = [];
 
@@ -57,7 +58,6 @@ export function HoneyBlaster(x, y) {
 }
 
 export const towerTypes = [Sunflower, HoneyBlaster];
-export let selectedTower = -1;
 
 function createElementFromHTML(htmlString) {
   var div = document.createElement('div');
@@ -88,7 +88,7 @@ function createTowerUi() {
         selected.classList.remove("selected");
       }
       tower.classList.add("selected");
-      selectedTower = i;
+      state.selectedTower = i;
     });
     towersElement.appendChild(tower);
   }
