@@ -22,10 +22,39 @@ div {
 
 .content {
   flex-direction: row;
+  width: 100vw;
 }
 
 .ui {
-  flex-direction: row;
-  gap: 100px;
   padding: 10px;
+  flex: 1;
 }
+
+#towers {
+  display: grid;
+  align-self: stretch;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fill, 180px);
+}
+
+.towerImage {
+  width: 96px;
+  height: 96px;
+  background-image: url("spritesheet.png");
+  background-size: 768px 768px;
+  image-rendering: pixelated;
+}
+
+.tower {
+  align-items: center;
+  background-color: hsl(255, 24%, 86%);
+  padding: 20px;
+  border-radius: 10px;
+  border-bottom: 3px solid hsl(267, 20%, 30%);
+  transition: ease-out 0.1s;
+}
+
+.tower:hover {
+  transform: scale(1.04);
+}
+
