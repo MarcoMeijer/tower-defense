@@ -148,8 +148,8 @@ export function progressWave(state, delta) {
 
   currentWave.timer += delta;
 
-  while (currentWave.number < waves.length) {
-    const wave = waves[currentWave.number];
+  while (true) {
+    const wave = waves[currentWave.number % waves.length];
 
     // go to next wave
     if (currentWave.group == wave.length) {
