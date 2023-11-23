@@ -1,7 +1,17 @@
 import { createElementFromHTML, distance } from "./util.js";
 
+function addEffect(entity, effect) {
+  for (const otherEffect of entity.effects) {
+    if (otherEffect[0] == effect[0]) {
+      otherEffect[1] = Math.max(otherEffect[1], effect[1]);
+      return;
+    }
+  }
+  entity.effects.push(effect);
+}
+
 export function updateTower(state, tower, dt) {
-  const { radius, tile, recharge, x, y } = tower;
+  const { radius, tile, recharge, effects, x, y } = tower;
   tower.timer += dt;
 
   if (tower.timer > recharge) {
@@ -9,6 +19,9 @@ export function updateTower(state, tower, dt) {
       if (distance(enemy, tower) < radius) {
         // shoot
         enemy.health -= 1;
+        for (const effect of effects) {
+          addEffect(enemy, effect)
+        }
         state.projectiles.push({
           tile: tile + 8,
           x,
@@ -30,9 +43,10 @@ export function Sunflower(x, y) {
     cost: 150,
     tile: 24,
     radius: 40,
-    recharge: 1,
+    recharge: 0.5,
     damage: 1,
     timer: 0,
+    effects: [],
     x,
     y,
   };
@@ -44,9 +58,10 @@ export function HoneyBlaster(x, y) {
     cost: 250,
     tile: 25,
     radius: 60,
-    recharge: 2,
+    recharge: 1,
     damage: 1,
     timer: 0,
+    effects: [["slow", 8]],
     x,
     y,
   };

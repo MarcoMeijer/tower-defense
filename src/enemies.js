@@ -13,6 +13,7 @@ export function Ant() {
     pathPart: 0,
     reward: 5,
     addedBonus: 1,
+    effects: [],
   };
 }
 
@@ -28,6 +29,7 @@ export function QueenAnt() {
     pathPart: 0,
     reward: 25,
     addedBonus: 3,
+    effects: [],
   };
 }
 
@@ -43,6 +45,7 @@ export function Bee() {
     pathPart: 0,
     reward: 10,
     addedBonus: 1,
+    effects: [],
   };
 }
 
@@ -50,6 +53,16 @@ export function updateEnemy(enemy, dt) {
   const { speed } = enemy;
 
   let dSpeed = speed * dt;
+
+  for (const effect of enemy.effects) {
+    effect[1] -= dt;
+  }
+  enemy.effects = enemy.effects.filter(effect => effect[1] >= 0);
+  for (const effect of enemy.effects) {
+    if (effect[0] === "slow") {
+      dSpeed /= 2;
+    }
+  }
 
   while (dSpeed > 0) {
     if (enemy.pathPart == path.length) {
