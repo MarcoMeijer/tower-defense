@@ -29,8 +29,42 @@ export function QueenAnt() {
     x: path[0].x * 24,
     y: path[0].y * 24,
     pathPart: 0,
-    reward: 25,
+    reward: 10,
     addedBonus: 2,
+    effects: [],
+  };
+}
+
+export function RedAnt() {
+  return {
+    name: "Red ant",
+    cost: 80,
+    tile: 18,
+    speed: 10,
+    health: 5,
+    futureHealth: 5,
+    x: path[0].x * 24,
+    y: path[0].y * 24,
+    pathPart: 0,
+    reward: 20,
+    addedBonus: 2,
+    effects: [],
+  };
+}
+
+export function RedQueenAnt() {
+  return {
+    name: "Red queen ant",
+    cost: 300,
+    tile: 19,
+    speed: 10,
+    health: 40,
+    futureHealth: 25,
+    x: path[0].x * 24,
+    y: path[0].y * 24,
+    pathPart: 0,
+    reward: 40,
+    addedBonus: 5,
     effects: [],
   };
 }
@@ -39,7 +73,7 @@ export function Bee() {
   return {
     name: "Bee",
     cost: 150,
-    tile: 18,
+    tile: 20,
     speed: 75,
     health: 5,
     futureHealth: 5,
@@ -114,7 +148,7 @@ export function updateEnemy(enemy, dt) {
   }
 }
 
-export const enemyTypes = [Ant, QueenAnt, Bee];
+export const enemyTypes = [Ant, QueenAnt, RedAnt, RedQueenAnt, Bee];
 
 export function createEnemyUi(state, socket) {
   const enemiesElement = document.querySelector("#enemies");

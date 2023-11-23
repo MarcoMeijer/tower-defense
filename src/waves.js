@@ -1,4 +1,4 @@
-import { Ant, Bee, QueenAnt } from "./enemies.js";
+import { Ant, Bee, QueenAnt, RedAnt, RedQueenAnt } from "./enemies.js";
 
 export const waves = [
   wave1(),
@@ -11,6 +11,10 @@ export const waves = [
   wave8(),
   wave9(),
   wave10(),
+  wave11(),
+  wave12(),
+  wave13(),
+  wave14(),
 ];
 
 function wave1() {
@@ -64,7 +68,7 @@ function wave4() {
 function wave5() {
   return [
     {
-      enemies: [Bee],
+      enemies: [RedAnt],
       distance: 1,
       amount: 8,
       wait: 15,
@@ -81,7 +85,7 @@ function wave6() {
       wait: 2,
     },
     {
-      enemies: [Bee],
+      enemies: [RedAnt],
       distance: 0.4,
       amount: 10,
       wait: 15,
@@ -92,7 +96,7 @@ function wave6() {
 function wave7() {
   return [
     {
-      enemies: [Bee],
+      enemies: [RedAnt],
       distance: 0.4,
       amount: 40,
       wait: 10,
@@ -103,13 +107,13 @@ function wave7() {
 function wave8() {
   return [
     {
-      enemies: [Bee, Ant, Ant],
+      enemies: [RedAnt, Ant, Ant],
       distance: 0.3,
       amount: 20,
       wait: 1,
     },
     {
-      enemies: [Ant, Bee, Bee],
+      enemies: [Ant, RedAnt, RedAnt],
       distance: 0.3,
       amount: 20,
       wait: 10,
@@ -120,10 +124,10 @@ function wave8() {
 function wave9() {
   return [
     {
-      enemies: [QueenAnt],
+      enemies: [RedQueenAnt],
       distance: 0.5,
-      amount: 20,
-      wait: 1,
+      amount: 1,
+      wait: 10,
     },
   ]
 }
@@ -131,14 +135,81 @@ function wave9() {
 function wave10() {
   return [
     {
-      enemies: [QueenAnt],
-      distance: 0.3,
+      enemies: [RedAnt],
+      distance: 0.2,
       amount: 25,
-      wait: 1,
+      wait: 10,
     },
   ]
 }
 
+function wave11() {
+  return [
+    {
+      enemies: [RedAnt, RedAnt, RedAnt, RedAnt, RedQueenAnt],
+      distance: 0.5,
+      amount: 25,
+      wait: 10,
+    },
+  ]
+}
+
+function wave12() {
+  return [
+    {
+      enemies: [RedAnt, RedAnt, RedQueenAnt],
+      distance: 0.5,
+      amount: 30,
+      wait: 1,
+    },
+    {
+      enemies: [QueenAnt],
+      distance: 0.5,
+      amount: 20,
+      wait: 10,
+    },
+  ]
+}
+
+function wave13() {
+  return [
+    {
+      enemies: [Ant],
+      distance: 0.15,
+      amount: 40,
+      wait: 1,
+    },
+    {
+      enemies: [Bee],
+      distance: 1,
+      amount: 30,
+      wait: 10,
+    },
+  ]
+}
+
+function wave14() {
+  return [
+    {
+      enemies: [RedQueenAnt],
+      distance: 1,
+      amount: 5,
+      wait: 1,
+    },
+    {
+      enemies: [Bee],
+      distance: 1,
+      amount: 30,
+      wait: 1,
+    },
+    {
+      enemies: [RedQueenAnt],
+      distance: 1,
+      amount: 5,
+      wait: 10,
+    },
+  ]
+}
 
 export function progressWave(state, delta) {
   const { currentWave } = state;
