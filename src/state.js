@@ -1,7 +1,7 @@
 
 export function newGame() {
   return {
-    money: 150,
+    money: 1500,
     health: 100,
     towerSelected: -1,
     enemies: [],

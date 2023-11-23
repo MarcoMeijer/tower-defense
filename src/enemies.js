@@ -28,7 +28,7 @@ export function QueenAnt() {
     y: path[0].y * 24,
     pathPart: 0,
     reward: 25,
-    addedBonus: 3,
+    addedBonus: 2,
     effects: [],
   };
 }
@@ -36,15 +36,15 @@ export function QueenAnt() {
 export function Bee() {
   return {
     name: "Bee",
-    cost: 20,
+    cost: 150,
     tile: 18,
     speed: 75,
-    health: 1,
+    health: 5,
     x: path[0].x * 24,
     y: path[0].y * 24,
     pathPart: 0,
-    reward: 10,
-    addedBonus: 1,
+    reward: 30,
+    addedBonus: 3,
     effects: [],
   };
 }
@@ -54,6 +54,7 @@ export function updateEnemy(enemy, dt) {
 
   let dSpeed = speed * dt;
 
+  console.log(dt);
   for (const effect of enemy.effects) {
     effect[1] -= dt;
   }

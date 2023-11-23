@@ -1,5 +1,14 @@
 import { createElementFromHTML, distance } from "./util.js";
 
+function hasEffect(entity, effect) {
+  for (const otherEffect of entity.effects) {
+    if (otherEffect[0] == effect[0]) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function addEffect(entity, effect) {
   for (const otherEffect of entity.effects) {
     if (otherEffect[0] == effect[0]) {
@@ -7,31 +16,40 @@ function addEffect(entity, effect) {
       return;
     }
   }
-  entity.effects.push(effect);
+  entity.effects.push([...effect]);
 }
 
 export function updateTower(state, tower, dt) {
-  const { radius, tile, recharge, effects, x, y } = tower;
+  const { radius, tile, recharge, effects, damage, x, y } = tower;
   tower.timer += dt;
 
   if (tower.timer > recharge) {
-    for (const enemy of state.enemies) {
-      if (distance(enemy, tower) < radius) {
-        // shoot
-        enemy.health -= 1;
-        for (const effect of effects) {
-          addEffect(enemy, effect)
+    for (let i = 0; i < 2; i++) {
+      for (const enemy of state.enemies) {
+        if (distance(enemy, tower) < radius) {
+          // shoot
+          if (i == 0) {
+            for (const effect of effects) {
+              if (hasEffect(enemy, effect)) {
+                continue;
+              }
+            }
+          }
+          enemy.health -= damage;
+          for (const effect of effects) {
+            addEffect(enemy, effect)
+          }
+          state.projectiles.push({
+            tile: tile + 8,
+            x,
+            y,
+            targetX: enemy.x,
+            targetY: enemy.y,
+            timeRemaining: 0.2,
+          });
+          tower.timer = 0;
+          return;
         }
-        state.projectiles.push({
-          tile: tile + 8,
-          x,
-          y,
-          targetX: enemy.x,
-          targetY: enemy.y,
-          timeRemaining: 0.2,
-        });
-        tower.timer = 0;
-        break;
       }
     }
   }
@@ -58,10 +76,10 @@ export function HoneyBlaster(x, y) {
     cost: 250,
     tile: 25,
     radius: 60,
-    recharge: 1,
-    damage: 1,
+    recharge: 0.5,
+    damage: 0.5,
     timer: 0,
-    effects: [["slow", 8]],
+    effects: [["slow", 10]],
     x,
     y,
   };
