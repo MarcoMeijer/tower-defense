@@ -12,6 +12,7 @@ export function updateProjectile(state, projectile, dt) {
       for (const enemy of state.enemies) {
         if (distance(enemy, projectile) < range) {
           enemy.health -= damage;
+          enemy.futureHealth -= damage;
         }
       }
     } else {
