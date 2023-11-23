@@ -73,7 +73,7 @@ export function Sunflower(x, y) {
     cost: 150,
     tile: 24,
     radius: 40,
-    recharge: 0.5,
+    recharge: 1,
     damage: 1,
     timer: 0,
     projectileRange: 0,
@@ -90,7 +90,7 @@ export function HoneyBlaster(x, y) {
     tile: 25,
     radius: 60,
     recharge: 0.5,
-    damage: 0.5,
+    damage: 0,
     timer: 0,
     projectileRange: 0,
     effects: [["slow", 10]],
@@ -102,7 +102,7 @@ export function HoneyBlaster(x, y) {
 export function IceCreamCone(x, y) {
   return {
     name: "Ice cream cone",
-    cost: 350,
+    cost: 400,
     tile: 26,
     radius: 50,
     recharge: 2,
@@ -118,7 +118,7 @@ export function IceCreamCone(x, y) {
 export function Cheese(x, y) {
   return {
     name: "Cheese",
-    cost: 350,
+    cost: 450,
     tile: 27,
     radius: 250,
     recharge: 4,
