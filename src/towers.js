@@ -115,8 +115,22 @@ export function IceCreamCone(x, y) {
   };
 }
 
+export function Cheese(x, y) {
+  return {
+    name: "Cheese",
+    cost: 350,
+    tile: 27,
+    radius: 250,
+    recharge: 4,
+    damage: 8,
+    timer: 0,
+    effects: [],
+    x,
+    y,
+  };
+}
 
-export const towerTypes = [Sunflower, HoneyBlaster, IceCreamCone];
+export const towerTypes = [Sunflower, HoneyBlaster, IceCreamCone, Cheese];
 
 export function createTowerUi(state) {
   const towersElement = document.querySelector("#towers");
