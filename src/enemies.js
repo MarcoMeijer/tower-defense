@@ -86,14 +86,11 @@ export function Bee() {
   };
 }
 
-export function updateEnemy(enemy, dt) {
+export function moveEnemy(enemy, dt) {
   const { speed } = enemy;
 
   let dSpeed = speed * dt;
 
-  for (const effect of enemy.effects) {
-    effect[1] -= dt;
-  }
   enemy.effects = enemy.effects.filter(effect => effect[1] >= 0);
   for (const effect of enemy.effects) {
     if (effect[0] === "slow") {
@@ -145,6 +142,16 @@ export function updateEnemy(enemy, dt) {
     if (targetX == enemy.x && targetY == enemy.y) {
       enemy.pathPart += 1;
     }
+  }
+
+  return enemy;
+}
+
+export function updateEnemy(enemy, dt) {
+  moveEnemy(enemy, dt);
+
+  for (const effect of enemy.effects) {
+    effect[1] -= dt;
   }
 }
 

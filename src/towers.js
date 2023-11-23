@@ -1,3 +1,4 @@
+import { moveEnemy } from "./enemies.js";
 import { createElementFromHTML, distance } from "./util.js";
 
 function hasEffect(entity, effect) {
@@ -49,13 +50,16 @@ export function updateTower(state, tower, dt) {
         if (projectileRange == 0) {
           enemy.futureHealth -= damage;
         }
+        const bulletSpeed = 0.2;
+        const newEnemyPos = moveEnemy({ ...enemy }, bulletSpeed);
+
         state.projectiles.push({
           tile: tile + 8,
           x,
           y,
-          targetX: enemy.x,
-          targetY: enemy.y,
-          timeRemaining: 0.2,
+          targetX: newEnemyPos.x,
+          targetY: newEnemyPos.y,
+          timeRemaining: bulletSpeed,
           damage,
           range: projectileRange,
           target: enemy,
