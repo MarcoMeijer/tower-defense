@@ -199,7 +199,7 @@ function handleEvent(socket, event) {
 }
 
 function openSocket() {
-  const socket = new WebSocket("ws://marco-meijer.nl/ws");
+  const socket = new WebSocket("wss://seahorse-app-jn2bg.ondigitalocean.app/ws");
 
   socket.onopen = function() {
     console.log("[open] Connection established");
