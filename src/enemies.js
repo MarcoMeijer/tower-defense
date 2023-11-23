@@ -157,7 +157,7 @@ export function updateEnemy(enemy, dt) {
 
 export const enemyTypes = [Ant, QueenAnt, RedAnt, RedQueenAnt, Bee];
 
-export function createEnemyUi(state, socket) {
+export function createEnemyUi(state, socket, opponentState) {
   const enemiesElement = document.querySelector("#enemies");
   for (let i = 0; i < enemyTypes.length; i++) {
     const { name, cost, tile, addedBonus } = enemyTypes[i]();
@@ -177,6 +177,7 @@ export function createEnemyUi(state, socket) {
         state.money -= cost;
         state.waveBonus += addedBonus;
         socket.send(JSON.stringify({ type: "send", name }));
+        opponentState.enemies.push(enemyTypes[i]());
       }
     });
     enemiesElement.appendChild(enemy);

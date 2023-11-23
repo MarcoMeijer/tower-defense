@@ -174,7 +174,7 @@ function startGame(socket) {
   draw(myCanvas, myCtx, myState, Date.now(), socket);
   draw(opponentCanvas, opponentCtx, opponentState, Date.now());
   createTowerUi(myState);
-  createEnemyUi(myState, socket);
+  createEnemyUi(myState, socket, opponentState);
   loadingElement.classList.add("hidden");
   contentElement.classList.remove("hidden");
 }
