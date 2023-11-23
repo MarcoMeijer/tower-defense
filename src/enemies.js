@@ -12,6 +12,7 @@ export function Ant() {
     y: path[0].y * 24,
     pathPart: 0,
     reward: 5,
+    addedBonus: 2,
   };
 }
 
@@ -26,6 +27,7 @@ export function QueenAnt() {
     y: path[0].y * 24,
     pathPart: 0,
     reward: 25,
+    addedBonus: 10,
   };
 }
 
@@ -40,6 +42,7 @@ export function Bee() {
     y: path[0].y * 24,
     pathPart: 0,
     reward: 10,
+    addedBonus: 4,
   };
 }
 
@@ -75,7 +78,7 @@ export const enemyTypes = [Ant, QueenAnt, Bee];
 export function createEnemyUi(state, socket) {
   const enemiesElement = document.querySelector("#enemies");
   for (let i = 0; i < enemyTypes.length; i++) {
-    const { name, cost, tile } = enemyTypes[i]();
+    const { name, cost, tile, addedBonus } = enemyTypes[i]();
     const tileX = tile % 8;
     const tileY = Math.floor(tile / 8);
     const enemy = createElementFromHTML(`
@@ -83,16 +86,16 @@ export function createEnemyUi(state, socket) {
       <div class="towerImage" style="background-position-x: -${tileX * 24 * 4}px; background-position-y: -${tileY * 24 * 4}px;"></div>
       <h2>${name}</h2>
       <h3>$${cost}</h3>
+      <p>Wave bonus: +$${addedBonus}</p>
     </div>
     `);
 
     enemy.addEventListener("click", () => {
-      console.log("click");
-      console.log(state);
       if (state.money >= cost) {
         state.money -= cost;
         socket.send(JSON.stringify({ type: "send", name }));
       }
+      state.waveBonus += addedBonus;
     });
     enemiesElement.appendChild(enemy);
   }

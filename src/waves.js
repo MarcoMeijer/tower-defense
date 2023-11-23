@@ -155,6 +155,7 @@ export function progressWave(state, delta) {
     if (currentWave.group == wave.length) {
       currentWave.number += 1;
       currentWave.group = 0;
+      state.money += state.waveBonus;
       continue;
     }
 

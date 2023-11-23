@@ -14,5 +14,6 @@ export function newGame() {
       enemy: 0,
       timer: 0,
     },
+    waveBonus: 10,
   };
 }
