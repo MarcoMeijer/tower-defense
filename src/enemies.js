@@ -175,9 +175,9 @@ export function createEnemyUi(state, socket) {
     enemy.addEventListener("click", () => {
       if (state.money >= cost) {
         state.money -= cost;
+        state.waveBonus += addedBonus;
         socket.send(JSON.stringify({ type: "send", name }));
       }
-      state.waveBonus += addedBonus;
     });
     enemiesElement.appendChild(enemy);
   }
