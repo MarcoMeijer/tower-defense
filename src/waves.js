@@ -7,6 +7,10 @@ export const waves = [
   wave4(),
   wave5(),
   wave6(),
+  wave7(),
+  wave8(),
+  wave9(),
+  wave10(),
 ];
 
 function wave1() {
@@ -82,6 +86,56 @@ function wave6() {
       amount: 10,
       wait: 15,
     }
+  ]
+}
+
+function wave7() {
+  return [
+    {
+      enemies: [Bee],
+      distance: 0.4,
+      amount: 40,
+      wait: 10,
+    },
+  ]
+}
+
+function wave8() {
+  return [
+    {
+      enemies: [Bee, Ant, Ant],
+      distance: 0.3,
+      amount: 20,
+      wait: 1,
+    },
+    {
+      enemies: [Ant, Bee, Bee],
+      distance: 0.3,
+      amount: 20,
+      wait: 10,
+    },
+  ]
+}
+
+function wave9() {
+  return [
+    {
+      enemies: [QueenAnt],
+      distance: 0.5,
+      amount: 20,
+      wait: 1,
+    },
+  ]
+}
+
+function wave10() {
+  return [
+    {
+      enemies: [QueenAnt],
+      distance: 0.3,
+      amount: 25,
+      wait: 1,
+    },
   ]
 }
 
