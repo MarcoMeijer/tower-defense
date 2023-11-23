@@ -111,7 +111,7 @@ div {
   display: none;
 }
 
-.usernameForm, .loading {
+.usernameForm, .loading, .youWon, .youLost {
   align-items: center;
   justify-content: center;
   width: 100vw;
@@ -160,4 +160,11 @@ div {
 
 .button:active {
   transform: scale(0.98);
+}
+
+.youWon, .youLost {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.4);
 }

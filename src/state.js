@@ -16,5 +16,6 @@ export function newGame() {
     },
     waveBonus: 10,
     sendTimer: 0,
+    stop: false,
   };
 }

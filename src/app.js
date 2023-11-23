@@ -134,6 +134,12 @@ function draw(canvas, ctx, state, lastUpdate, socket) {
   waveText.innerText = `Wave: ${state.currentWave.number + 1}`;
 
   if (socket) {
+    if (state.health == 0) {
+      const youLost = document.querySelector(".youLost");
+      youLost.classList.remove("hidden");
+      state.stop = true;
+      socket.send(JSON.stringify({ type: "lose" }));
+    }
     state.sendTimer += dt;
     if (state.sendTimer > 1) {
       socket.send(JSON.stringify({ type: "update", state }));
@@ -142,6 +148,10 @@ function draw(canvas, ctx, state, lastUpdate, socket) {
   } else {
     const username = document.querySelector(".username");
     username.innerText = `${state.username}:`;
+  }
+
+  if (state.stop) {
+    return;
   }
 
   window.requestAnimationFrame(() => draw(canvas, ctx, state, now, socket));
@@ -200,6 +210,22 @@ function handleEvent(socket, event) {
       }
     }
   }
+  if (event.type === "lose") {
+    const youWon = document.querySelector(".youWon");
+    myState.stop = true;
+    opponentState.stop = true;
+    youWon.classList.remove("hidden");
+    socket.send(JSON.stringify({ type: "update", state: myState }));
+  }
+}
+
+function restart() {
+  location.reload();
+}
+
+const restartElements = document.querySelectorAll(".restart");
+for (const restartElement of restartElements) {
+  restartElement.addEventListener('click', restart);
 }
 
 function openSocket() {
