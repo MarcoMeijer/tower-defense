@@ -77,7 +77,7 @@ export function drawRadius(ctx, tower) {
 
 function draw(canvas, ctx, state, lastUpdate, socket) {
   const now = Date.now();
-  const dt = (now - lastUpdate) / 1000 * 3;
+  const dt = (now - lastUpdate) / 1000;
 
   // wave logic
   progressWave(state, dt);
@@ -90,7 +90,7 @@ function draw(canvas, ctx, state, lastUpdate, socket) {
     updateTower(state, tower, dt);
   }
   for (const projectile of state.projectiles) {
-    updateProjectile(projectile, dt);
+    updateProjectile(state, projectile, dt);
   }
 
   // kill enemies

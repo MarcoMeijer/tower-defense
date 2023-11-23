@@ -63,6 +63,7 @@ div {
   border-bottom: 3px solid hsl(267, 20%, 30%);
   transition: ease-out 0.1s;
   cursor: pointer;
+  text-align: center;
 }
 
 .tower.selected {

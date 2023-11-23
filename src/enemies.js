@@ -8,6 +8,7 @@ export function Ant() {
     tile: 16,
     speed: 25,
     health: 1,
+    futureHealth: 1,
     x: path[0].x * 24,
     y: path[0].y * 24,
     pathPart: 0,
@@ -24,6 +25,7 @@ export function QueenAnt() {
     tile: 17,
     speed: 25,
     health: 4,
+    futureHealth: 4,
     x: path[0].x * 24,
     y: path[0].y * 24,
     pathPart: 0,
@@ -40,6 +42,7 @@ export function Bee() {
     tile: 18,
     speed: 75,
     health: 5,
+    futureHealth: 5,
     x: path[0].x * 24,
     y: path[0].y * 24,
     pathPart: 0,
@@ -54,7 +57,6 @@ export function updateEnemy(enemy, dt) {
 
   let dSpeed = speed * dt;
 
-  console.log(dt);
   for (const effect of enemy.effects) {
     effect[1] -= dt;
   }

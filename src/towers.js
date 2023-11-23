@@ -2,7 +2,7 @@ import { createElementFromHTML, distance } from "./util.js";
 
 function hasEffect(entity, effect) {
   for (const otherEffect of entity.effects) {
-    if (otherEffect[0] == effect[0]) {
+    if (otherEffect[0] == effect) {
       return true;
     }
   }
@@ -20,36 +20,48 @@ function addEffect(entity, effect) {
 }
 
 export function updateTower(state, tower, dt) {
-  const { radius, tile, recharge, effects, damage, x, y } = tower;
+  const { radius, tile, recharge, effects, damage, x, y, projectileRange } = tower;
   tower.timer += dt;
 
   if (tower.timer > recharge) {
     for (let i = 0; i < 2; i++) {
       for (const enemy of state.enemies) {
-        if (distance(enemy, tower) < radius) {
-          // shoot
-          if (i == 0) {
-            for (const effect of effects) {
-              if (hasEffect(enemy, effect)) {
-                continue;
-              }
+        if (distance(enemy, tower) >= radius) {
+          continue;
+        }
+
+        if (enemy.futureHealth <= 0) {
+          continue;
+        }
+
+        if (i == 0) {
+          for (const effect of effects) {
+            if (hasEffect(enemy, effect[0])) {
+              continue;
             }
           }
-          enemy.health -= damage;
-          for (const effect of effects) {
-            addEffect(enemy, effect)
-          }
-          state.projectiles.push({
-            tile: tile + 8,
-            x,
-            y,
-            targetX: enemy.x,
-            targetY: enemy.y,
-            timeRemaining: 0.2,
-          });
-          tower.timer = 0;
-          return;
         }
+
+        // shoot
+        for (const effect of effects) {
+          addEffect(enemy, effect)
+        }
+        if (projectileRange == 0) {
+          enemy.futureHealth -= damage;
+        }
+        state.projectiles.push({
+          tile: tile + 8,
+          x,
+          y,
+          targetX: enemy.x,
+          targetY: enemy.y,
+          timeRemaining: 0.2,
+          damage,
+          range: projectileRange,
+          target: enemy,
+        });
+        tower.timer = 0;
+        return;
       }
     }
   }
@@ -64,6 +76,7 @@ export function Sunflower(x, y) {
     recharge: 0.5,
     damage: 1,
     timer: 0,
+    projectileRange: 0,
     effects: [],
     x,
     y,
@@ -79,13 +92,31 @@ export function HoneyBlaster(x, y) {
     recharge: 0.5,
     damage: 0.5,
     timer: 0,
+    projectileRange: 0,
     effects: [["slow", 10]],
     x,
     y,
   };
 }
 
-export const towerTypes = [Sunflower, HoneyBlaster];
+export function IceCreamCone(x, y) {
+  return {
+    name: "Ice cream cone",
+    cost: 350,
+    tile: 26,
+    radius: 50,
+    recharge: 2,
+    damage: 2,
+    timer: 0,
+    projectileRange: 12,
+    effects: [],
+    x,
+    y,
+  };
+}
+
+
+export const towerTypes = [Sunflower, HoneyBlaster, IceCreamCone];
 
 export function createTowerUi(state) {
   const towersElement = document.querySelector("#towers");
