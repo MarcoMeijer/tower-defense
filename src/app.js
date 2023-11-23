@@ -5,8 +5,9 @@ import { progressWave } from "./waves.js";
 import { updateProjectile } from "./projectiles.js";
 import { newGame } from "./state.js";
 
-const socket = new WebSocket("ws://localhost:9090/ws");
-
+const usernameForm = document.querySelector(".usernameForm");
+const loadingElement = document.querySelector(".loading");
+const contentElement = document.querySelector(".content");
 const myCanvas = document.querySelector("#myGame");
 const opponentCanvas = document.querySelector("#opponentGame");
 
@@ -74,7 +75,7 @@ export function drawRadius(ctx, tower) {
   ctx.stroke();
 }
 
-function draw(canvas, ctx, state) {
+function draw(canvas, ctx, state, socket) {
 
   // wave logic
   progressWave(state, 1 / 30);
@@ -130,11 +131,14 @@ function draw(canvas, ctx, state) {
   moneyElement.innerText = `$${state.money}`;
   waveText.innerText = `Wave: ${state.currentWave.number + 1}`;
 
-  if (state === myState) {
+  if (socket) {
     socket.send(JSON.stringify({ type: "update", state }));
+  } else {
+    const username = document.querySelector(".username");
+    username.innerText = `${state.username}:`;
   }
 
-  window.requestAnimationFrame(() => draw(canvas, ctx, state));
+  window.requestAnimationFrame(() => draw(canvas, ctx, state, socket));
 }
 
 myCanvas.addEventListener('click', function(event) {
@@ -157,24 +161,27 @@ myCanvas.addEventListener('click', function(event) {
   }
 });
 
-function handleEvent(event) {
+function handleEvent(socket, event) {
   if (event.type === "start") {
     myState.currentWave.started = true;
     opponentState.currentWave.started = true;
-    draw(myCanvas, myCtx, myState);
+    draw(myCanvas, myCtx, myState, socket);
     draw(opponentCanvas, opponentCtx, opponentState);
     createTowerUi(myState);
     createEnemyUi(myState, socket);
-
+    loadingElement.classList.add("hidden");
+    contentElement.classList.remove("hidden");
   }
   if (event.type === "update") {
     if (myState.currentWave.started === false) {
       myState.currentWave.started = true;
       opponentState.currentWave.started = true;
-      draw(myCanvas, myCtx, myState);
+      draw(myCanvas, myCtx, myState, socket);
       draw(opponentCanvas, opponentCtx, opponentState);
       createTowerUi(myState);
       createEnemyUi(myState, socket);
+      loadingElement.classList.add("hidden");
+      contentElement.classList.remove("hidden");
     }
     for (const key in event.state) {
       opponentState[key] = event.state[key];
@@ -191,24 +198,44 @@ function handleEvent(event) {
   }
 }
 
-socket.onopen = function() {
-  console.log("[open] Connection established");
-};
+function openSocket() {
+  const socket = new WebSocket("ws://localhost:9090/ws");
 
-socket.onmessage = function(event) {
-  const message = JSON.parse(event.data);
-  handleEvent(message);
-};
+  socket.onopen = function() {
+    console.log("[open] Connection established");
+  };
 
-socket.onclose = function(event) {
-  if (event.wasClean) {
-    console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
-  } else {
-    console.log('[close] Connection died');
-  }
-};
+  socket.onmessage = function(event) {
+    const message = JSON.parse(event.data);
+    handleEvent(socket, message);
+  };
 
-socket.onerror = function(error) {
-  console.log(error)
-};
+  socket.onclose = function(event) {
+    if (event.wasClean) {
+      console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+    } else {
+      console.log('[close] Connection died');
+    }
+  };
+
+  socket.onerror = function(error) {
+    console.log(error)
+  };
+
+}
+
+const form = document.querySelector("form");
+
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
+  usernameForm.classList.add("hidden");
+  loadingElement.classList.remove("hidden");
+  openSocket();
+
+  const formData = new FormData(event.target);
+  const formProps = Object.fromEntries(formData);
+  myState.username = formProps.username;
+
+  form.reset();
+});
 

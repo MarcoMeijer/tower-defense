@@ -10,6 +10,14 @@
   user-select: none;
 }
 
+body {
+  background: linear-gradient(
+    to bottom right,
+    hsl(29, 70%, 89%),
+    hsl(216, 70%, 90%)
+  );
+}
+
 canvas {
   image-rendering: pixelated;
   width: 768px;
@@ -49,7 +57,7 @@ div {
 
 .tower, .enemy {
   align-items: center;
-  background-color: hsl(255, 24%, 86%);
+  background-color: hsl(255, 40%, 78%);
   padding: 20px;
   border-radius: 10px;
   border-bottom: 3px solid hsl(267, 20%, 30%);
@@ -58,17 +66,17 @@ div {
 }
 
 .tower.selected {
-  background-color: hsl(255, 40%, 75%);
+  background-color: hsl(255, 40%, 65%);
 }
 
 .tower:hover, .enemy:hover {
   transform: scale(1.02);
-  background-color: hsl(255, 28%, 82%);
+  background-color: hsl(255, 40%, 70%);
 }
 
 .tower:active, .enemy:active {
   transform: scale(0.98);
-  background-color: hsl(255, 40%, 75%);
+  background-color: hsl(255, 40%, 68%);
 }
 
 .game {
@@ -96,4 +104,59 @@ div {
 
 .gameUi.right {
   right: 0;
+}
+
+.hidden {
+  display: none;
+}
+
+.usernameForm, .loading {
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.usernameForm .popup {
+  width: 200px;
+}
+
+.popup {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 24px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: hsl(288, 10%, 50%);
+  color: #ffffff;
+}
+
+.textField {
+  border: none;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 20px;
+}
+
+.button {
+  border: none;
+  padding: 5px;
+  margin: 5px 0px;
+  border-radius: 5px;
+  font-size: 20px;
+  cursor: pointer;
+  color: #ffffff;
+  background-color: hsl(252, 50%, 20%);
+  border-bottom: 2px solid #000000;
+  transition: ease-out 0.1s;
+}
+
+.button:hover {
+  transform: scale(1.02);
+  background-color: hsl(252, 50%, 25%);
+}
+
+.button:active {
+  transform: scale(0.98);
 }
