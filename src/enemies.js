@@ -100,7 +100,7 @@ export function moveEnemy(enemy, dt) {
 
   while (dSpeed > 0) {
     if (enemy.pathPart == path.length) {
-      return;
+      return enemy;
     }
 
     const { x, y } = path[enemy.pathPart];
