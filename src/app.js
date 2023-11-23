@@ -75,20 +75,22 @@ export function drawRadius(ctx, tower) {
   ctx.stroke();
 }
 
-function draw(canvas, ctx, state, socket) {
+function draw(canvas, ctx, state, lastUpdate, socket) {
+  const now = Date.now();
+  const dt = (now - lastUpdate) / 1000;
 
   // wave logic
-  progressWave(state, 1 / 30);
+  progressWave(state, dt);
 
   // update entities
   for (const enemy of state.enemies) {
-    updateEnemy(enemy);
+    updateEnemy(enemy, dt);
   }
   for (const tower of state.towers) {
-    updateTower(state, tower, 1 / 30);
+    updateTower(state, tower, dt);
   }
   for (const projectile of state.projectiles) {
-    updateProjectile(projectile, 1 / 30);
+    updateProjectile(projectile, dt);
   }
 
   // kill enemies
@@ -138,7 +140,7 @@ function draw(canvas, ctx, state, socket) {
     username.innerText = `${state.username}:`;
   }
 
-  window.requestAnimationFrame(() => draw(canvas, ctx, state, socket));
+  window.requestAnimationFrame(() => draw(canvas, ctx, state, now, socket));
 }
 
 myCanvas.addEventListener('click', function(event) {
@@ -161,27 +163,25 @@ myCanvas.addEventListener('click', function(event) {
   }
 });
 
+function startGame(socket) {
+  console.log("start game");
+  myState.currentWave.started = true;
+  opponentState.currentWave.started = true;
+  draw(myCanvas, myCtx, myState, Date.now(), socket);
+  draw(opponentCanvas, opponentCtx, opponentState, Date.now());
+  createTowerUi(myState);
+  createEnemyUi(myState, socket);
+  loadingElement.classList.add("hidden");
+  contentElement.classList.remove("hidden");
+}
+
 function handleEvent(socket, event) {
   if (event.type === "start") {
-    myState.currentWave.started = true;
-    opponentState.currentWave.started = true;
-    draw(myCanvas, myCtx, myState, socket);
-    draw(opponentCanvas, opponentCtx, opponentState);
-    createTowerUi(myState);
-    createEnemyUi(myState, socket);
-    loadingElement.classList.add("hidden");
-    contentElement.classList.remove("hidden");
+    startGame(socket);
   }
   if (event.type === "update") {
     if (myState.currentWave.started === false) {
-      myState.currentWave.started = true;
-      opponentState.currentWave.started = true;
-      draw(myCanvas, myCtx, myState, socket);
-      draw(opponentCanvas, opponentCtx, opponentState);
-      createTowerUi(myState);
-      createEnemyUi(myState, socket);
-      loadingElement.classList.add("hidden");
-      contentElement.classList.remove("hidden");
+      startGame(socket);
     }
     for (const key in event.state) {
       opponentState[key] = event.state[key];

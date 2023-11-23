@@ -15,7 +15,7 @@ export function updateTower(state, tower, dt) {
           y,
           targetX: enemy.x,
           targetY: enemy.y,
-          timeRemaining: 0.4,
+          timeRemaining: 0.2,
         });
         tower.timer = 0;
         break;
