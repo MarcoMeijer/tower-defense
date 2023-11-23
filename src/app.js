@@ -199,7 +199,7 @@ function handleEvent(socket, event) {
 }
 
 function openSocket() {
-  const socket = new WebSocket("ws://localhost:9090/ws");
+  const socket = new WebSocket("ws://marco-meijer.nl/ws");
 
   socket.onopen = function() {
     console.log("[open] Connection established");
