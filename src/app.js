@@ -134,7 +134,11 @@ function draw(canvas, ctx, state, lastUpdate, socket) {
   waveText.innerText = `Wave: ${state.currentWave.number + 1}`;
 
   if (socket) {
-    socket.send(JSON.stringify({ type: "update", state }));
+    state.sendTimer += dt;
+    if (state.sendTimer > 1) {
+      socket.send(JSON.stringify({ type: "update", state }));
+      state.sendTimer -= 1;
+    }
   } else {
     const username = document.querySelector(".username");
     username.innerText = `${state.username}:`;

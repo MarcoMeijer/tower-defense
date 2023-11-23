@@ -15,5 +15,6 @@ export function newGame() {
       timer: 0,
     },
     waveBonus: 10,
+    sendTimer: 0,
   };
 }
