@@ -36,11 +36,15 @@ export function updateTower(state, tower, dt) {
         }
 
         if (i == 0) {
+          const cont = false;
           for (const effect of effects) {
             if (hasEffect(enemy, effect[0])) {
-              continue;
+              cont = true;
+              break;
             }
           }
+          if (cont)
+            continue;
         }
 
         // shoot
