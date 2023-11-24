@@ -36,7 +36,7 @@ export function updateTower(state, tower, dt) {
         }
 
         if (i == 0) {
-          const cont = false;
+          let cont = false;
           for (const effect of effects) {
             if (hasEffect(enemy, effect[0])) {
               cont = true;
