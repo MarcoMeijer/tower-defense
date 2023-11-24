@@ -76,7 +76,7 @@ export function Bee() {
     tile: 20,
     speed: 75,
     health: 8,
-    futureHealth: 15,
+    futureHealth: 8,
     x: path[0].x * 24,
     y: path[0].y * 24,
     pathPart: 0,
