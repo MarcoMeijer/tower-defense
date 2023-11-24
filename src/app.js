@@ -86,6 +86,11 @@ function draw(canvas, ctx, state, lastUpdate, socket) {
   for (const enemy of state.enemies) {
     updateEnemy(enemy, dt);
   }
+  state.enemies.sort((a, b) => {
+    if (a.pathPart != b.pathPart)
+      return b.pathPart - a.pathPart;
+    return a.x < b.x;
+  });
   for (const tower of state.towers) {
     updateTower(state, tower, dt);
   }
